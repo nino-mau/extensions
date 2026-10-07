@@ -1,0 +1,112 @@
+import {
+  Action,
+  ActionPanel,
+  Grid,
+  Icon,
+  showToast,
+  Toast,
+} from '@vicinae/api';
+import { useEffect, useState } from 'react';
+import {
+  getCurrentWallpaper,
+  listWallpapers,
+  setWallpaper,
+  type Wallpaper,
+} from './modules/noctalia';
+
+export default function SwitchWallpaper() {
+  const [wallpapers, setWallpapers] = useState<Wallpaper[]>([]);
+  const [currentWallpaperPath, setCurrentWallpaperPath] = useState<string>();
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Handle fetching the noctalia wallpapers and active wallpaper
+  useEffect(() => {
+    (async () => {
+      try {
+        const [wallpapers, active] = await Promise.all([
+          listWallpapers(),
+          getCurrentWallpaper(),
+        ]);
+        setCurrentWallpaperPath(active);
+        setWallpapers(wallpapers);
+      } catch (error) {
+        showToast(
+          Toast.Style.Failure,
+          'Failed to load wallpapers',
+          String(error)
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
+
+  /**
+   * Handle making the given wallpaper the current noctalia wallpaper
+   */
+  async function applyWallpaper(wallpaper: Wallpaper) {
+    try {
+      await setWallpaper(wallpaper.path);
+      setCurrentWallpaperPath(wallpaper.path);
+      showToast(Toast.Style.Success, 'Wallpaper set', wallpaper.name);
+    } catch (error) {
+      showToast(Toast.Style.Failure, 'Failed to set wallpaper', String(error));
+    }
+  }
+
+  // Group wallpapers by their directory relative to the wallpaper root
+  const sections = new Map<string, Wallpaper[]>();
+  for (const wallpaper of wallpapers) {
+    sections.set(wallpaper.section, [
+      ...(sections.get(wallpaper.section) ?? []),
+      wallpaper,
+    ]);
+  }
+
+  const wallpaperItem = (wallpaper: Wallpaper) => (
+    <Grid.Item
+      key={wallpaper.path}
+      title={wallpaper.path === currentWallpaperPath ? 'Current' : undefined}
+      subtitle={wallpaper.name}
+      content={{
+        source: wallpaper.path,
+      }}
+      keywords={[wallpaper.section]}
+      actions={
+        <ActionPanel>
+          <Action
+            title="Set Wallpaper"
+            icon={Icon.Image}
+            onAction={() => applyWallpaper(wallpaper)}
+          />
+          <Action.CopyToClipboard title="Copy Path" content={wallpaper.path} />
+        </ActionPanel>
+      }
+    />
+  );
+
+  const currentWallpaper = wallpapers.find(
+    (w) => w.path === currentWallpaperPath
+  );
+
+  return (
+    <Grid
+      isLoading={isLoading}
+      columns={4}
+      aspectRatio="16/9"
+      fit={Grid.Fit.Fill}
+      searchBarPlaceholder="Search wallpapers..."
+    >
+      {currentWallpaper && (
+        <Grid.Section title="Current">
+          {wallpaperItem(currentWallpaper)}
+        </Grid.Section>
+      )}
+      {[...sections].map(([section, items]) => (
+        <Grid.Section key={section} title={section || 'Wallpapers'}>
+          {items.map(wallpaperItem)}
+        </Grid.Section>
+      ))}
+    </Grid>
+  );
+}
