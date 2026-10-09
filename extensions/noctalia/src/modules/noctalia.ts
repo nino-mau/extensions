@@ -68,3 +68,7 @@ export async function listWallpapers(): Promise<Wallpaper[]> {
     }))
     .sort((a, b) => a.path.localeCompare(b.path));
 }
+
+export async function openSettingsWindow() {
+  await execNoctalia(['msg', 'settings-open']);
+}

@@ -15,6 +15,12 @@
       "title": "Switch Wallpaper",
       "description": "Browse and set wallpapers from the noctalia wallpaper directory",
       "mode": "view"
+    },
+    {
+      "name": "open-settings",
+      "title": "Open Settings",
+      "description": "Open noctalia settings window",
+      "mode": "no-view"
     }
   ],
   "preferences": [],
