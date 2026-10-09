@@ -21,6 +21,42 @@
       "title": "Open Settings",
       "description": "Open noctalia settings window",
       "mode": "no-view"
+    },
+    {
+      "name": "toggle-bar",
+      "title": "Toggle Bar",
+      "description": "Toggle noctalia bar visibility",
+      "mode": "no-view"
+    },
+    {
+      "name": "toggle-do-not-disturb",
+      "title": "Toggle Do Not Disturb",
+      "description": "Toggle noctalia Do Not Disturb mode",
+      "mode": "no-view"
+    },
+    {
+      "name": "toggle-lockscreen-editor",
+      "title": "Toggle Lockscreen Editor",
+      "description": "Toggle noctalia lockscreen widgets edit mode",
+      "mode": "no-view"
+    },
+    {
+      "name": "apply-templates",
+      "title": "Apply Templates",
+      "description": "Apply the configured noctalia theme templates",
+      "mode": "no-view"
+    },
+    {
+      "name": "toggle-caffeine",
+      "title": "Toggle Caffeine",
+      "description": "Toggle noctalia cafeine mode (idle inhibitor)",
+      "mode": "no-view"
+    },
+    {
+      "name": "export-config",
+      "title": "Export Config",
+      "description": "Copy noctalia merged config to clipboard",
+      "mode": "no-view"
     }
   ],
   "preferences": [],

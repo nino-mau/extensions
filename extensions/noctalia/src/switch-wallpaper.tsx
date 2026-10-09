@@ -11,10 +11,10 @@ import {
 import { useEffect, useState } from 'react';
 import {
   getCurrentWallpaper,
-  listWallpapers,
+  getWallpapers,
   setWallpaper,
   type Wallpaper,
-} from './modules/noctalia';
+} from './modules/wallpapers';
 
 export default function SwitchWallpaper() {
   const [wallpapers, setWallpapers] = useState<Wallpaper[]>([]);
@@ -26,7 +26,7 @@ export default function SwitchWallpaper() {
     (async () => {
       try {
         const [wallpapers, active] = await Promise.all([
-          listWallpapers(),
+          getWallpapers(),
           getCurrentWallpaper(),
         ]);
         setCurrentWallpaperPath(active);
