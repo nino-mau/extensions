@@ -1,8 +1,10 @@
 import {
   Action,
   ActionPanel,
+  Clipboard,
   Grid,
   Icon,
+  Keyboard,
   showToast,
   Toast,
 } from '@vicinae/api';
@@ -75,11 +77,29 @@ export default function SwitchWallpaper() {
       actions={
         <ActionPanel>
           <Action
-            title="Set Wallpaper"
+            title="Set as wallpaper"
             icon={Icon.Image}
             onAction={() => applyWallpaper(wallpaper)}
           />
-          <Action.CopyToClipboard title="Copy Path" content={wallpaper.path} />
+          <Action.Open
+            title="Open Image"
+            icon={Icon.Image}
+            target={wallpaper.path}
+          />
+          <ActionPanel.Section>
+            <Action
+              title="Copy Image"
+              icon={Icon.CopyClipboard}
+              onAction={() => {
+                Clipboard.copy({ file: wallpaper.path });
+              }}
+              shortcut={Keyboard.Shortcut.Common.Copy}
+            />
+            <Action.CopyToClipboard
+              title="Copy Path"
+              content={wallpaper.path}
+            />
+          </ActionPanel.Section>
         </ActionPanel>
       }
     />
